@@ -1,0 +1,125 @@
+
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aniversário de 60 anos - Kátia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    p {
+      text-align: center;
+      font-size: 16px;
+    }
+    .info {
+      margin: 20px 0;
+    }
+    .info strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-confirmar {
+      background: #28a745;
+      color: #fff;
+    }
+    .btn-nao {
+      background: #dc3545;
+      color: #fff;
+    }
+    .btn-maps {
+      background: #007bff;
+      color: #fff;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .lista {
+      margin-top: 20px;
+    }
+    .lista ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>  <div class="container">
+    <h1>🎉 Aniversário da Kátia 🎉</h1>
+    <h2>60 anos</h2>
+    <p>Venha celebrar a vida comigo!</p><div class="info">
+  <p><strong>📅 Data:</strong> 21 de Fevereiro</p>
+  <p><strong>⏰ Horário:</strong> 20h</p>
+  <p><strong>📝 Confirmar até:</strong> 12 de Fevereiro</p>
+</div>
+
+<button class="btn-maps" onclick="window.open('https://maps.app.goo.gl/xZStWAijjCpuH8n27')">
+  📍 Ver local no mapa
+</button>
+
+<hr />
+
+<h2>Confirme sua presença</h2>
+<input type="text" id="nome" placeholder="Digite seu nome" />
+
+<button class="btn-confirmar" onclick="confirmarPresenca(true)">
+  ✅ Vou comparecer
+</button>
+
+<button class="btn-nao" onclick="confirmarPresenca(false)">
+  ❌ Não vou comparecer
+</button>
+
+<div class="lista">
+  <h3>✅ Confirmados</h3>
+  <ul id="listaSim"></ul>
+
+  <h3>❌ Não vão</h3>
+  <ul id="listaNao"></ul>
+</div>
+
+  </div>  <script>
+    function confirmarPresenca(vai) {
+      const nome = document.getElementById('nome').value.trim();
+
+      if (!nome) {
+        alert('Por favor, informe seu nome');
+        return;
+      }
+
+      if (vai) {
+        document.getElementById('listaSim').innerHTML += `<li>${nome}</li>`;
+        window.open('https://wa.me/5551995381186?text=Olá, Fernanda! Confirmo minha presença no aniversário da Kátia no dia 21/02 às 20h.');
+      } else {
+        document.getElementById('listaNao').innerHTML += `<li>${nome}</li>`;
+      }
+
+      document.getElementById('nome').value = '';
+    }
+  </script></body>
+</html>
