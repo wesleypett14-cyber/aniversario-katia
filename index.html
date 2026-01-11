@@ -1,125 +1,104 @@
-
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aniversário de 60 anos - Kátia</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 30px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    p {
-      text-align: center;
-      font-size: 16px;
-    }
-    .info {
-      margin: 20px 0;
-    }
-    .info strong {
-      display: block;
-      margin-bottom: 5px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .btn-confirmar {
-      background: #28a745;
-      color: #fff;
-    }
-    .btn-nao {
-      background: #dc3545;
-      color: #fff;
-    }
-    .btn-maps {
-      background: #007bff;
-      color: #fff;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .lista {
-      margin-top: 20px;
-    }
-    .lista ul {
-      padding-left: 20px;
-    }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1, h2, h3 { text-align: center; }
+    p { text-align: center; }
+    input { width: 100%; padding: 10px; margin-top: 10px; }
+    button { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
+    .sim { background: #28a745; color: #fff; }
+    .nao { background: #dc3545; color: #fff; }
+    ul { padding-left: 20px; }
+    .contador { display: flex; justify-content: space-around; margin-top: 15px; font-weight: bold; }
   </style>
 </head>
-<body>  <div class="container">
-    <h1>🎉 Aniversário da Kátia 🎉</h1>
-    <h2>60 anos</h2>
-    <p>Venha celebrar a vida comigo!</p><div class="info">
-  <p><strong>📅 Data:</strong> 21 de Fevereiro</p>
-  <p><strong>⏰ Horário:</strong> 20h</p>
-  <p><strong>📝 Confirmar até:</strong> 12 de Fevereiro</p>
-</div>
+<body>
 
-<button class="btn-maps" onclick="window.open('https://maps.app.goo.gl/xZStWAijjCpuH8n27')">
-  📍 Ver local no mapa
-</button>
+<div class="container">
+  <h1>🎉 Aniversário da Kátia 🎉</h1>
+  <h2>60 anos</h2>
+  <p>📅 21 de Fevereiro às 20h</p>
+  <p>📝 Confirmar até 12 de Fevereiro</p>
 
-<hr />
+  <input type="text" id="nome" placeholder="Digite seu nome" />
 
-<h2>Confirme sua presença</h2>
-<input type="text" id="nome" placeholder="Digite seu nome" />
+  <button class="sim" onclick="confirmar(true)">✅ Vou comparecer</button>
+  <button class="nao" onclick="confirmar(false)">❌ Não vou comparecer</button>
 
-<button class="btn-confirmar" onclick="confirmarPresenca(true)">
-  ✅ Vou comparecer
-</button>
+  <div class="contador">
+    <div>✅ Vão: <span id="totalSim">0</span></div>
+    <div>❌ Não vão: <span id="totalNao">0</span></div>
+  </div>
 
-<button class="btn-nao" onclick="confirmarPresenca(false)">
-  ❌ Não vou comparecer
-</button>
-
-<div class="lista">
-  <h3>✅ Confirmados</h3>
+  <h3>Lista de Convidados</h3>
+  <h4>✅ Confirmados</h4>
   <ul id="listaSim"></ul>
 
-  <h3>❌ Não vão</h3>
+  <h4>❌ Não vão</h4>
   <ul id="listaNao"></ul>
 </div>
 
-  </div>  <script>
-    function confirmarPresenca(vai) {
-      const nome = document.getElementById('nome').value.trim();
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXNU-tZS9kj1qkN9dVpUXLf4_4GHp7Xwo",
+    authDomain: "aniversario-katia.firebaseapp.com",
+    databaseURL: "https://aniversario-katia-default-rtdb.firebaseio.com",
+    projectId: "aniversario-katia",
+    storageBucket: "aniversario-katia.firebasestorage.app",
+    messagingSenderId: "718344842562",
+    appId: "1:718344842562:web:5326ebacd02beb2fbcecdb"
+  };
 
-      if (!nome) {
-        alert('Por favor, informe seu nome');
-        return;
-      }
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-      if (vai) {
-        document.getElementById('listaSim').innerHTML += `<li>${nome}</li>`;
-        window.open('https://wa.me/5551995381186?text=Olá, Fernanda! Confirmo minha presença no aniversário da Kátia no dia 21/02 às 20h.');
-      } else {
-        document.getElementById('listaNao').innerHTML += `<li>${nome}</li>`;
-      }
+  function confirmar(vai) {
+    const nome = document.getElementById('nome').value.trim();
+    if (!nome) return alert('Informe seu nome');
 
-      document.getElementById('nome').value = '';
+    const ref = db.ref('presencas/' + nome.replace(/\./g, ''));
+    ref.set({ status: vai ? 'sim' : 'nao' });
+
+    if (vai) {
+      window.open('https://wa.me/5551995381186?text=Olá, Fernanda! Confirmo minha presença no aniversário da Kátia no dia 21/02 às 20h.');
     }
-  </script></body>
+
+    document.getElementById('nome').value = '';
+  }
+
+  db.ref('presencas').on('value', snapshot => {
+    const dados = snapshot.val() || {};
+    const listaSim = document.getElementById('listaSim');
+    const listaNao = document.getElementById('listaNao');
+    listaSim.innerHTML = '';
+    listaNao.innerHTML = '';
+
+    let sim = 0, nao = 0;
+
+    Object.keys(dados).forEach(nome => {
+      if (dados[nome].status === 'sim') {
+        sim++;
+        listaSim.innerHTML += `<li>${nome}</li>`;
+      } else {
+        nao++;
+        listaNao.innerHTML += `<li>${nome}</li>`;
+      }
+    });
+
+    document.getElementById('totalSim').innerText = sim;
+    document.getElementById('totalNao').innerText = nao;
+  });
+</script>
+
+</body>
 </html>
